@@ -2,7 +2,7 @@
 <html>
 <head>
    <title>Home</title>
-   <link rel="stylesheet" type="text/css" href="mystyle.css" />
+   <link rel="stylesheet" type="text/css" href="abc.css" />
 </head>
 
 <body>
@@ -66,7 +66,7 @@
    </div>
 
    <footer>
-	<p> Copyrights© CloudExperience. All rights reserved. </p
+	<p> CopyrightsÂ© CloudExperience. All rights reserved. </p
    </footer>
 
  </div>
