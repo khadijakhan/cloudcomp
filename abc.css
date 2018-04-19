@@ -1,20 +1,27 @@
 body
 {
+	margin: 0px;
+	padding: 0px;
+	color: black;
 	font-size:18px;
-	background-color: #f5ce57;
+	background: #f3f3f3;
 }
 
 #wrapper
-{
-
-	
+{	
+	width: 100%;
+	min-height: 90%;
+	height: auto;
+	margin: auto;
+	background-color: #f5ce57;	
 	
 }
 
 nav
 {
+	float: right;
+	line-height:50px;
 	width: 100%;
-	height: 30px;
 	background-color: purple;
 	color: white;
 	text-align: center;
@@ -23,9 +30,11 @@ nav
 
 a
 {
+	display: inline-block;
+	padding: 5px 5px;
+	margin-left: 10px;
+	line-height: normal;
 	color: white;
-	margin-left: 8px;
-	margin-right:8px;
 	
 
 
@@ -34,19 +43,22 @@ a
 #section
 {
 	width: 100%;
+	min-height: 90%;
 	height: auto ;
-	margin-left: 40px;
-	margin-right: 40px;
-	margin-top: 50px;
-	margin-bottom : 50px;
-	overflow: scroll;
+	padding: 20px;
+	overflow: hidden;
 
 }
 
 footer
 {
-	text-align: center;
-	font-size:14px;	
+	background-color: #f5ce57;
+	width: 100%;
+    	line-height: 10px;
+	float: left;
+    	text-align: center;
+    	font-size: 14px;
+    	
 
 }
 
