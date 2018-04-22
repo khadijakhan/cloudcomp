@@ -21,85 +21,140 @@
 
    <div id="section">
 
-	<h3>The cloud risks are: </h3>
+	<table>
 
-	<?php
-	   define ('servername' , 'localhost');
-	   define ('username' , 'clouduser');
-	   define ('password' , 'clouduser2018');
-	   define ('database' , 'repository');
+	   <?php 
+		define ('servername' , 'localhost');
+	   	define ('username' , 'clouduser');
+	   	define ('password' , 'clouduser2018');
+	   	define ('database' , 'repository');
 
-	   // Create connection
-	   $conn = new mysqli(servername, username, password, database);
-	   // Check connection
-	   if ($conn->connect_error) 
-	   {
-	       die("Connection failed: " . $conn->connect_error);
-	   } 
-	
-	   $sql = "SELECT obstical.obsID, obstical.obsName, obstical.obsDetail, sor.sID FROM repository.obstical LEFT JOIN sor ON obstical.obsID = sor.obsID;";
-	   $result = $conn->query($sql);
-	   $countobs=-1;  $check=0;  //to keep track of each obstacle
+	   	// Create connection
+	   	$conn = new mysqli(servername, username, password, database);
+	   	// Check connection
+	   	if ($conn->connect_error) 
+	   	{
+	       	   die("Connection failed: " . $conn->connect_error);
+	   	} 
 
-	   if ($result->num_rows > 0) 
-	   {
-		echo "<table><tr><th>#</th><th>Obstacle</th><th>Definition</th><th>Study</th></tr>";
+		$sql = "SELECT COUNT(*) AS 'C' FROM repository.obstical;";
+	   	$result = $conn->query($sql);
 
-		
-	        // output data of each row
-	        while($row = $result->fetch_assoc())
-		{
+		if ($result->num_rows > 0) 
+	   	{    // output data of each row
+	             while($row = $result->fetch_assoc())
+		     {	$max= $row["C"];   }
+		}
+	   ?>
 
-   	           //set check to obs-id so that we know which obstacle is currently being displayed.
-		   $check= $row["obsID"];
+	   <tr><th>#</th><th>Obstacle</th><th>Definition </th><th>Quality Goals</th><th>Migration Type</th><th>Study</th></tr></tr>
 
-		   //for first entry
-		   if($countobs==-1)
-		   {
-			echo "<tr><td>O" . $row["obsID"]. "</td><td>" .$row["obsName"]. "</td> <td>" . $row["obsDetail"]. "</td><td>S". $row["sID"];
-			$countobs=0;
-	  	   }
+	   <?php for($x=1; $x <= $max; $x++) { ?>
+	     <tr>
 
-		   //if obstacle id has changed from the previous iteration, new row of obstacles will be created. Otherwise we'll keep adding sources to the previous row.
-		   else if($countobs!=$check) 
-		   { 
-			//if there is no source, we will not type 'S' in the Study field
-			if($row["sID"]!=null)
-			{
-	           	   echo "</td></tr><tr><td>O" . $row["obsID"]. "</td><td>" .$row["obsName"]. "</td> <td>" . $row["obsDetail"]. "</td><td>S". $row["sID"] ;
-			   $countgoal= $row["obsID"];  //to keep count of goal
+		<td> 
+
+		     <?php  echo "O". $x ; ?> 
+
+		</td>
+
+		<td>
+		     <?php
+
+			$sql = "SELECT obsName FROM repository.obstical WHERE obsID = ". $x .";";
+	   		$result = $conn->query($sql);
+
+			if ($result->num_rows > 0) 
+	   		{    // output data of each row
+	             	     while($row = $result->fetch_assoc())
+		             {	echo $row["obsName"];   }
+			}
+ 
+		     ?>
+		</td>
+
+		<td>
+
+		     <?php
+
+			$sql = "SELECT obsDetail FROM repository.obstical WHERE obsID = ". $x .";";
+	   		$result = $conn->query($sql);
+
+			if ($result->num_rows > 0) 
+	   		{    // output data of each row
+	             	     while($row = $result->fetch_assoc())
+		             {	echo $row["obsDetail"];   }
 			}
 
-			//but if there is a source, we will type 'S' in the Study field before sID.
-			else
-			{
-	           	   echo "</td></tr><tr><td>O" . $row["obsID"]. "</td><td>" .$row["obsName"]. "</td> <td>" . $row["obsDetail"]. "</td><td>". $row["sID"] ;
-			   $countgoal= $row["obsID"];
-			}
-		   }
+		     ?>
 
-	   	   else
-		   {
-			echo ", S". $row["sID"];
+		</td>
+
+		<td>
+
+		     <?php
 			
-		   }
+			$sql = "SELECT gName 
+				FROM (( repository.obstical 
+				LEFT JOIN repository.gor ON obstical.obsID = gor.obsID ) 
+				LEFT JOIN repository.goal ON gor.gID = goal.gID)
+				WHERE obstical.obsID = ". $x .";";
 
-		   //setting it at the end of loop to see if obstacle ID changes in next iteration
-		   $countobs=$row["obsID"];   
-		
-	        }
-		
-		echo "</table>";
-	   }
+	   		$result = $conn->query($sql);
 
-	   else 
-	   {
-		echo "0 results";
-	   }
+			if ($result->num_rows > 0) 
+	   		{    // output data of each row
+	             	     while($row = $result->fetch_assoc())
+		             {	echo $row["gName"] .", ";   }
+			}
 
-	   $conn->close();	
-	?>
+		     ?>
 
+		</td>
+
+		<td>
+
+		     <?php
+
+			$sql = "SELECT mName 
+				FROM (( repository.obstical 
+				LEFT JOIN repository.mor ON obstical.obsID = mor.obsID ) 
+				LEFT JOIN repository.migration ON mor.mID = migration.mID)
+				WHERE obstical.obsID = ". $x .";";
+
+	   		$result = $conn->query($sql);
+
+			if ($result->num_rows > 0) 
+	   		{    // output data of each row
+	             	     while($row = $result->fetch_assoc())
+		             {	echo $row["mName"] .", ";   }
+			}
+
+		     ?>
+
+		</td>
+
+		<td>
+
+		     <?php
+
+			$sql = "SELECT sID FROM ( repository.obstical LEFT JOIN repository.sor ON obstical.obsID = sor.obsID ) WHERE obstical.obsID = ". $x .";";
+	   		$result = $conn->query($sql);
+
+			if ($result->num_rows > 0) 
+	   		{    // output data of each row
+	             	     while($row = $result->fetch_assoc())
+		             {	if($row["sID"] != NULL ) {  echo "S". $row["sID"] .", ";   } }
+			}
+
+		     ?>
+
+		</td>
+
+	     </tr>
+	   <?php } $conn->close(); ?>
+
+	</table>
 
    </div>
 
