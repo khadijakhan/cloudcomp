@@ -21,22 +21,39 @@
 
    <div id="section">
 
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
-	* <br/>
+	<?php
+	   define ('servername' , 'localhost');
+	   define ('username' , 'clouduser');
+	   define ('password' , 'clouduser2018');
+	   define ('database' , 'repository');
+ // Create connection
+	   $conn = new mysqli(servername, username, password, database);
+	   // Check connection
+	   if ($conn->connect_error) 
+	   {
+	       die("Connection failed: " . $conn->connect_error);
+	   } 
+	   $sql = "SELECT sID, sDetail, year FROM study";
+	   $result = $conn->query($sql);
+	    if ($result->num_rows > 0) 
+	   {
+		echo "<table><tr><th>Identifier</th><th>Study</th><th>Year</th></tr>";
+
+		
+	        // output data of each row
+	        while($row = $result->fetch_assoc())
+{echo "<tr><td>S" . $row["sID"]. "</td><td>" .$row["sDetail"]. "</td><td>" .$row["year"]. "</td> </tr>" ;}
+	 
+		echo "</table>";
+	   }
+
+	   else 
+	   {
+		echo "0 results";
+	   }
+
+	   $conn->close();	
+	?>
 
    </div>
 
