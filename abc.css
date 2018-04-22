@@ -68,6 +68,7 @@ table
 	border-color: black;
 	border-style:solid;
 	border-collapse: collapse;
+	max-width: 1300px;
 
 }
 td, tr, th
